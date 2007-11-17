@@ -1,0 +1,86 @@
+<?xml version="1.0"?>
+<project name="Dashboard" default="plugin" basedir=".">
+
+	<!-- Set up all the project specific properties -->
+	<property name="PLUGIN_NAME" value="Dashboard"/>
+	<property name="ROOT" value="."/>
+	<property name="SRC" value="${ROOT}/src"/>
+	<property name="BIN" value="${ROOT}/bin"/>
+	<property name="BUILD" value="${ROOT}/build"/>
+	<property name="DOCS" value="${ROOT}/docs"/>
+	<property name="ETC" value="${ROOT}/etc"/>	
+	<property name="LIB" value="${ROOT}/lib"/>
+
+	
+	<!-- Grab the version number from plugin.properties.  This properties file 
+	   MUST include the string "VERSION=x.y.r.b" where "x.y.r.b" is the version number.
+		 You SHOULD include all four digits, even if they are zero. -->
+	<property file="${ETC}/plugin.properties"/>
+
+	<target name="release" depends="plugin" description="Builds the plugin, and wraps it in a .zip file, including the documentation.">
+		<zip destfile="${BUILD}/${PLUGIN_NAME}-${VERSION}.zip">
+			<fileset dir="${BUILD}">
+				<include name="${PLUGIN_NAME}.buddi3plugin"/>
+			</fileset>
+			<fileset dir="${DOCS}">
+				<include name="**/*"/>
+			</fileset>			
+		</zip>
+		
+		<delete>
+			<fileset file="${BUILD}/${PLUGIN_NAME}.buddi3plugin"/>
+		</delete>
+	</target>
+
+	<target name="plugin" depends="clean,compile" description="Builds plugin package, using a single 'fat' jar, including all jars in the lib directory.">
+		<mkdir dir="${BUILD}/tmp"/>
+		<unzip dest="${BUILD}/tmp">
+			<fileset dir="${LIB}">
+				<include name="*.jar"/>
+				<exclude name="Buddi.jar"/>
+			</fileset>
+		</unzip>
+		
+		<jar destfile="${BUILD}/${PLUGIN_NAME}.buddi3plugin">
+			<fileset dir="${BIN}" includes="**/*"/>
+			<fileset dir="${BUILD}/tmp" includes="**/*"/>
+			<fileset dir="${ETC}">
+				<include name="Languages/*"/>
+				<include name="plugin.properties"/>
+			</fileset>
+			<fileset dir="${ROOT}">
+				<include name="docs/*"/>
+			</fileset>
+		</jar>
+		
+		<delete includeemptydirs="true">
+			<fileset dir="${BUILD}/tmp"/>
+		</delete>
+	</target>
+
+	<target name="compile" description="Builds the project">
+		<available file="${LIB}/Buddi.jar" type="file" property="Buddi.present"/>
+		<fail unless="Buddi.present">
+			Please copy Buddi.jar to the lib directory.  See Readme.txt for more details.
+		</fail>
+		
+		<javac srcdir="${SRC}" destdir="${BIN}" debug="true" debuglevel="lines, vars, source">
+			<classpath>
+				<fileset dir="${LIB}">
+					<include name="*.jar"/>
+				</fileset>
+			</classpath>
+		</javac>
+	</target>
+
+	<target name="clean" description="Cleans the build folder">
+		<delete includeemptydirs="true" failonerror="false">
+			<fileset dir="${BUILD}">
+				<include name="**/*"/>
+			</fileset>
+			<fileset dir="${BIN}">
+				<include name="**/*"/>
+			</fileset>			
+		</delete>
+	</target>
+</project>
