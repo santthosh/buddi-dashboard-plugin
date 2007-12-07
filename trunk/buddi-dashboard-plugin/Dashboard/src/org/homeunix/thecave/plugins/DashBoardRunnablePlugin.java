@@ -3,7 +3,14 @@
  */
 package org.homeunix.thecave.plugins;
 
+import org.homeunix.thecave.buddi.model.Document;
+import org.homeunix.thecave.buddi.model.impl.ModelFactory;
+import org.homeunix.thecave.buddi.model.prefs.PrefsModel;
 import org.homeunix.thecave.buddi.plugin.api.BuddiRunnablePlugin;
+import org.homeunix.thecave.buddi.plugin.api.exception.ModelException;
+import org.homeunix.thecave.buddi.view.MainFrame;
+import org.homeunix.thecave.moss.exception.WindowOpenException;
+import org.homeunix.thecave.moss.util.Log;
 
 /**
  * @author Santthosh
@@ -17,7 +24,7 @@ public class DashBoardRunnablePlugin extends BuddiRunnablePlugin {
 	@Override
 	public String getDescription() {
 		// TODO Auto-generated method stub		
-		return null;
+		return "DashBoard plugin for Buddi 1.0";
 	}
 
 	/* (non-Javadoc)
@@ -26,7 +33,7 @@ public class DashBoardRunnablePlugin extends BuddiRunnablePlugin {
 	@Override
 	public String getName() {
 		// TODO Auto-generated method stub
-		return null;
+		return "DashBoard";
 	}
 
 	/* (non-Javadoc)
@@ -43,8 +50,14 @@ public class DashBoardRunnablePlugin extends BuddiRunnablePlugin {
 	 */
 	@Override
 	public void run() {
-		// TODO Auto-generated method stub
-
+		// TODO Auto-generated method stub		
+		try {
+			DashBoardFrame dbFrame = new DashBoardFrame();
+			dbFrame.openWindow();
+		}				
+		catch (WindowOpenException woe){
+			woe.printStackTrace(Log.getPrintStream());
+		}			
 	}
 
 }

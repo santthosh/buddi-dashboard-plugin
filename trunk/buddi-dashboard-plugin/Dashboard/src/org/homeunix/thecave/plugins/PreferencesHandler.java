@@ -98,7 +98,7 @@ public abstract class Preference {
 	 * @param key The key to read.
 	 * @return The value associated with the given key, or null if there was no 
 	 * such value set.
-	 */
+	 *
 	public String getPreference(String key){
 		return PrefsModel.getInstance().getPluginPreference(key);
 	}
@@ -114,7 +114,7 @@ public abstract class Preference {
 	 * For instance, use the key "com.example.buddi.ImportFoo.LAST_EXECUTE_DAY" 
 	 * instead of the key "LAST_EXECUTE_DAY".
 	 * @param value The value to store.  Can be any valid String.
-	 */
+	 *
 	public void putPreference(String key, String value){
 		PrefsModel.getInstance().putPluginPreference(key, value);
 	}
@@ -131,7 +131,7 @@ public abstract class Preference {
 	 * For instance, use the key "com.example.buddi.ImportFoo.LAST_EXECUTE_DAY" 
 	 * instead of the key "LAST_EXECUTE_DAY".
 	 * @param values The list of values to store
-	 */
+	 *
 	public void putListPreference(String key, List<String> values){
 		PrefsModel.getInstance().putPluginListPreference(key, values);
 	}
@@ -148,7 +148,7 @@ public abstract class Preference {
 	 * instead of the key "LAST_EXECUTE_DAY".
 
 	 * @return
-	 */
+	 *
 	public List<String> getListPreference(String key){
 		return PrefsModel.getInstance().getPluginListPreference(key);
 	}
@@ -159,7 +159,7 @@ public abstract class Preference {
 	 * @param key
 	 * @param password
 	 * @return
-	 */
+	 *
 	public String getSecurePreference(String key, char[] password) throws PluginException {
 		try {
 			BuddiCryptoFactory crypto = new BuddiCryptoFactory();
@@ -180,7 +180,7 @@ public abstract class Preference {
 	 * @param key
 	 * @param value
 	 * @param password
-	 */
+	 *
 	public void putSecurePreference(String key, String value, char[] password) throws PluginException {
 		try {
 			BuddiCryptoFactory crypto = new BuddiCryptoFactory();
