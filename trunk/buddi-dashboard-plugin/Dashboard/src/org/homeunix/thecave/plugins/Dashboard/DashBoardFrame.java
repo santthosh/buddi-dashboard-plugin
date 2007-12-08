@@ -25,28 +25,13 @@ public class DashBoardFrame extends MossFrame {
 	private DataPanel dataPanel;
 	private ChartPanel chartPanel;
 	private JLabel dashLabel, hideLabel;
-	private MouseDragAdapter mouseAdapter;		
+	private MouseDragAdapter mouseAdapter;	
+
 
 	public DashBoardFrame(PreferenceAccess preferencesHandler)
 	{
 		super();	
 		
-		//Retrieve the location preferences
-        if(preferencesHandler!=null)
-        {
-        	Integer X = Integer.getInteger(preferencesHandler.getPreference("Dashboard_Location_X"));
-        	Integer Y = Integer.getInteger(preferencesHandler.getPreference("Dashboard_Location_Y"));        	
-        	
-        	if(X != null && Y!=null && X>0 && Y>0)
-        	{
-        		this.setLocation(X,Y);	
-        	}
-        	else
-        	{
-        		this.setLocationByPlatform(true);
-        	}
-        }
-        
 	    mouseAdapter = new MouseDragAdapter(this);
 	    mouseAdapter.setPreferences(preferencesHandler);
 	    HideAdapter hideAdapter = new HideAdapter(this);
@@ -95,13 +80,13 @@ public class DashBoardFrame extends MossFrame {
 	}
 		
 	public void init() {
-		super.init();
+		super.init();		
 		
 		//Moss frame properties
 		this.setIconImage(ClassLoaderFunctions.getImageFromClasspath("img/BuddiFrameIcon.gif"));
 		this.setUndecorated(true);
-		this.setTitle("Dashboard");
-		this.add(mainPanel);		
+		this.setTitle("Dashboard");		
+		this.add(mainPanel);						
 	}
 	
 	private static class HideAdapter implements MouseListener, MouseMotionListener{
@@ -152,8 +137,8 @@ public class DashBoardFrame extends MossFrame {
 					//Update the preferences
 					if(preferences!=null)
 					{	            	   	            	   
-						preferences.putPreference("Dashboard_Location_X",String.valueOf(fp.x + mp.x - origin.x));
-						preferences.putPreference("Dashboard_Location_Y",String.valueOf(fp.y + mp.y - origin.y));						
+						preferences.putPreference("org.homeunix.thecave.plugins.dashboard.LOCATION_X",String.valueOf(fp.x + mp.x - origin.x));
+						preferences.putPreference("org.homeunix.thecave.plugins.dashboard.LOCATION_Y",String.valueOf(fp.y + mp.y - origin.y));												
 					}
 				}
 			});

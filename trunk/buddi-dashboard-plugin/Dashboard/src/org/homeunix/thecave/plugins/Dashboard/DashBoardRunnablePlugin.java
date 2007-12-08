@@ -56,10 +56,30 @@ public class DashBoardRunnablePlugin extends BuddiRunnablePlugin {
 		try {
 			dbFrame = new DashBoardFrame(this);			
 			dbFrame.openWindow();
+			setPreferences();
 		}				
 		catch (WindowOpenException woe){
 			woe.printStackTrace(Log.getPrintStream());
 		}			
 	}
-
+	
+	/**
+	 * 
+	 */
+	public void setPreferences()
+	{
+		//Retrieve the location preferences
+        if(this!=null &&
+           this.getPreference("org.homeunix.thecave.plugins.dashboard.LOCATION_X") != null &&
+           this.getPreference("org.homeunix.thecave.plugins.dashboard.LOCATION_Y") != null)        		
+        {
+        	Integer X = Integer.parseInt(this.getPreference("org.homeunix.thecave.plugins.dashboard.LOCATION_X"));
+        	Integer Y = Integer.parseInt(this.getPreference("org.homeunix.thecave.plugins.dashboard.LOCATION_Y"));        		        		        	
+        	
+        	if(X !=null && Y!= null && X>0 && Y>0)
+        	{        		
+        		dbFrame.setLocation(X, Y);
+        	}        	
+        }
+	}
 }
