@@ -3,14 +3,12 @@
  */
 package org.homeunix.thecave.plugins.dashboard;
 
-import org.homeunix.thecave.buddi.model.Document;
-import org.homeunix.thecave.buddi.model.impl.ModelFactory;
-import org.homeunix.thecave.buddi.model.prefs.PrefsModel;
 import org.homeunix.thecave.buddi.plugin.api.BuddiRunnablePlugin;
-import org.homeunix.thecave.buddi.plugin.api.exception.ModelException;
-import org.homeunix.thecave.buddi.view.MainFrame;
+import org.homeunix.thecave.buddi.*;
 import org.homeunix.thecave.moss.exception.WindowOpenException;
 import org.homeunix.thecave.moss.util.Log;
+import org.homeunix.drummer.model.DataInstance;
+import org.homeunix.drummer.model.*; 
 
 /**
  * @author Santthosh
@@ -56,7 +54,8 @@ public class DashBoardRunnablePlugin extends BuddiRunnablePlugin {
 		try {
 			dbFrame = new DashBoardFrame(this);			
 			dbFrame.openWindow();
-			setPreferences();
+			setPreferences();		
+						
 		}				
 		catch (WindowOpenException woe){
 			woe.printStackTrace(Log.getPrintStream());
