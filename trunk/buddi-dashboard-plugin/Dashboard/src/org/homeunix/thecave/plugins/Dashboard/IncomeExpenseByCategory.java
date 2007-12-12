@@ -32,10 +32,12 @@ import org.jfree.chart.plot.PlotOrientation;
  *
  */
 public class IncomeExpenseByCategory extends ChartPanel {
+	
+	public static final long serialVersionUID = 0;
 
 	JLabel lblChart;
 	
-	public IncomeExpenseByCategory(MossFrame parent)
+	public IncomeExpenseByCategory(DashBoardFrame parent)
 	{
 		super(parent);
 	}
@@ -44,33 +46,24 @@ public class IncomeExpenseByCategory extends ChartPanel {
 	 * @see org.homeunix.thecave.plugins.dashboard.ChartPanel#paintChart(org.homeunix.thecave.moss.swing.MossDocumentFrame, java.util.Date, java.util.Date)
 	 */
 	@Override
-	public void paintChart(Date startDate,Date endDate) {
+	public void paintChart(MainFrame mainFrame, Date startDate,Date endDate) {
 		
-		///Check if we have opened at least one window...
-		MainFrame mainFrame = null;
-		System.out.println(ApplicationModel.getInstance().getOpenFrames().size());
-		for (MossFrame mossFrame : ApplicationModel.getInstance().getOpenFrames()) {
-			if (mossFrame instanceof MainFrame){
-				mainFrame = (MainFrame) mossFrame;
-				break;
-			}
-		}
-		if (mainFrame == null)
-		{
-			Log.emergency("No Buddi main windows were open!");
-			return;
-		}
-		
+		this.removeAll();
+					
 		ImmutableDocument document = new ImmutableDocumentImpl((Document)mainFrame.getDocument());
 		if(document != null)
 		{
 			
-			List<ImmutableBudgetCategory> categories = document.getImmutableBudgetCategories();		
+			List<ImmutableBudgetCategory> categories = document.getImmutableBudgetCategories();	
 			
 			for(int i=0;i< categories.size();i++)
 			{
 				System.out.println(categories.get(i).getFullName());
 			}
+		}
+		else
+		{
+			return;
 		}
 		
 					
@@ -96,5 +89,4 @@ public class IncomeExpenseByCategory extends ChartPanel {
 		
 		this.add(lblChart);
 	}
-
 }

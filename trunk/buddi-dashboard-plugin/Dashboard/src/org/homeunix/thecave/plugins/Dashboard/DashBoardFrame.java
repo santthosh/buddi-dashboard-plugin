@@ -25,8 +25,10 @@ public class DashBoardFrame extends MossFrame {
 	private JTabbedPane tabPanel;
 	private DataPanel dataPanel;
 	private ChartPanel chartPanel;
-	private JLabel dashLabel, hideLabel;
+	private JLabel dashLabel, freezeLabel, hideLabel;
 	private MouseDragAdapter mouseAdapter;	
+	private HideAdapter hideAdapter;
+	private FreezeAdapter freezeAdapter;
 
 
 	public DashBoardFrame(PreferenceAccess preferencesHandler)
@@ -35,7 +37,8 @@ public class DashBoardFrame extends MossFrame {
 		
 	    mouseAdapter = new MouseDragAdapter(this);
 	    mouseAdapter.setPreferences(preferencesHandler);
-	    HideAdapter hideAdapter = new HideAdapter(this);
+	    hideAdapter = new HideAdapter(this);
+	    freezeAdapter = new FreezeAdapter(this);
 	      
 	    //Main Panel
 	    mainPanel = new JPanel();
@@ -66,8 +69,14 @@ public class DashBoardFrame extends MossFrame {
 	    dashLabel = new JLabel();
 	    dashLabel.setFont(new java.awt.Font("Dialog", 0, 11));
 	    dashLabel.setForeground(java.awt.Color.BLUE);
-	    dashLabel.setText(" Buddi Dashboard ");      
-	    titlePanel.add(dashLabel,BorderLayout.WEST);        
+	    dashLabel.setText(" Buddi Dashboard                                                       ");      
+	    titlePanel.add(dashLabel,BorderLayout.WEST);
+	    
+	    freezeLabel = new JLabel();
+	    freezeLabel.setFont(new java.awt.Font("Dialog", 0, 10));
+	    freezeLabel.setText("Freeze");      
+	    titlePanel.add(freezeLabel,BorderLayout.CENTER);      
+	    freezeLabel.addMouseListener(freezeAdapter);
 	      
 	    hideLabel = new JLabel();
 	    hideLabel.setFont(new java.awt.Font("Dialog", 0, 10));
@@ -90,6 +99,44 @@ public class DashBoardFrame extends MossFrame {
 		this.add(mainPanel);	
 	}
 	
+	private static class FreezeAdapter implements MouseListener, MouseMotionListener{
+	      
+	      private DashBoardFrame frame;
+	      
+	      public FreezeAdapter(DashBoardFrame frame){
+	         this.frame = frame;
+	      }
+	      
+	      public void mousePressed(MouseEvent e) {}	      	      
+	      
+	      public void mouseDragged(MouseEvent e) {}	         	      
+	      
+	      public void mouseClicked(MouseEvent e) {	  
+	    	  
+	    	  SwingUtilities.invokeLater(new Runnable() {
+					public void run() {
+	    	  if(frame.freezeLabel.getText().equalsIgnoreCase("Freeze"))
+	    	  {
+	    		  frame.chartPanel.timer.stop();
+	    		  frame.freezeLabel.setText("Activate");
+	    		  frame.freezeLabel.setForeground(java.awt.Color.RED);	    		  
+	    	  }
+	    	  else
+	    	  {
+	    		  frame.chartPanel.timer.start();	    		  
+	    		  frame.freezeLabel.setText("Freeze");
+	    		  frame.freezeLabel.setForeground(java.awt.Color.BLACK);
+	    	  }
+					}
+	    	  });
+	      }
+	      public void mouseReleased(MouseEvent e) {}	         
+	      public void mouseEntered(MouseEvent e) {}
+	      public void mouseExited(MouseEvent e) {}
+	      public void mouseMoved(MouseEvent e) {}
+	      
+	   }
+	
 	private static class HideAdapter implements MouseListener, MouseMotionListener{
 	      	      
 	      private MossFrame frame;
@@ -103,7 +150,9 @@ public class DashBoardFrame extends MossFrame {
 	      public void mouseDragged(MouseEvent e) {}	         	      
 	      
 	      public void mouseClicked(MouseEvent e) {
-	    	  frame.closeWindow();
+	    	  SwingUtilities.invokeLater(new Runnable() {
+					public void run() {frame.dispose();} 
+					});	    	  
 	      }
 	      public void mouseReleased(MouseEvent e) {}	         
 	      public void mouseEntered(MouseEvent e) {}
@@ -145,7 +194,7 @@ public class DashBoardFrame extends MossFrame {
 			});
 		}
 
-		public void mouseClicked(MouseEvent e) {frame.getChartPanel().paintChart(new Date(),new Date());frame.pack();}
+		public void mouseClicked(MouseEvent e) {}
 		public void mouseReleased(MouseEvent e) {
 			origin.x = 0;
 			origin.y = 0;
