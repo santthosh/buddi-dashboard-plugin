@@ -5,6 +5,7 @@ import java.awt.Point;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
+import java.util.Date;
 
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -44,7 +45,7 @@ public class DashBoardFrame extends MossFrame {
 	    tabPanel = new JTabbedPane();
 	    tabPanel.setFont(new java.awt.Font("Dialog", 0, 10));
 	      
-	    chartPanel = new ChartPanel(this);      
+	    chartPanel = new IncomeExpenseByCategory(this);      
 	    chartPanel.addMouseListener(mouseAdapter);
 	    chartPanel.addMouseMotionListener(mouseAdapter);
 	    tabPanel.addTab("Chart", chartPanel);
@@ -86,7 +87,7 @@ public class DashBoardFrame extends MossFrame {
 		this.setIconImage(ClassLoaderFunctions.getImageFromClasspath("img/BuddiFrameIcon.gif"));
 		this.setUndecorated(true);
 		this.setTitle("Dashboard");		
-		this.add(mainPanel);						
+		this.add(mainPanel);	
 	}
 	
 	private static class HideAdapter implements MouseListener, MouseMotionListener{
@@ -114,10 +115,10 @@ public class DashBoardFrame extends MossFrame {
 	private static class MouseDragAdapter implements MouseListener, MouseMotionListener{
 
 		private static Point origin = new Point();
-		private MossFrame frame;
+		private DashBoardFrame frame;
 		private PreferenceAccess preferences;
 
-		public MouseDragAdapter(MossFrame frame){	    	 
+		public MouseDragAdapter(DashBoardFrame frame){	    	 
 			this.frame = frame;
 		}
 
@@ -139,12 +140,12 @@ public class DashBoardFrame extends MossFrame {
 					{	            	   	            	   
 						preferences.putPreference("org.homeunix.thecave.plugins.dashboard.LOCATION_X",String.valueOf(fp.x + mp.x - origin.x));
 						preferences.putPreference("org.homeunix.thecave.plugins.dashboard.LOCATION_Y",String.valueOf(fp.y + mp.y - origin.y));												
-					}
+					}						
 				}
 			});
 		}
 
-		public void mouseClicked(MouseEvent e) {}
+		public void mouseClicked(MouseEvent e) {frame.getChartPanel().paintChart(new Date(),new Date());frame.pack();}
 		public void mouseReleased(MouseEvent e) {
 			origin.x = 0;
 			origin.y = 0;
@@ -168,5 +169,19 @@ public class DashBoardFrame extends MossFrame {
 		}
 
 
+	}
+
+	/**
+	 * @return the chartPanel
+	 */
+	public ChartPanel getChartPanel() {
+		return chartPanel;
+	}
+
+	/**
+	 * @param chartPanel the chartPanel to set
+	 */
+	public void setChartPanel(ChartPanel chartPanel) {
+		this.chartPanel = chartPanel;
 	}
 }
