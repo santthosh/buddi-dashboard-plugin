@@ -23,7 +23,7 @@ public class DashBoardFrame extends MossFrame {
 	private JPanel mainPanel,titlePanel;
 	protected JTabbedPane tabPanel;
 	protected DataPanel dataPanel;
-	private ChartPanel chartPanel;
+	protected ChartPanel chartPanel;
 	private JLabel dashLabel, freezeLabel, hideLabel;
 	private MouseDragAdapter mouseAdapter;	
 	private HideAdapter hideAdapter;
@@ -41,24 +41,33 @@ public class DashBoardFrame extends MossFrame {
 	    mouseAdapter.setPreferences(this.preferencesHandler);
 	    hideAdapter = new HideAdapter(this);
 	    freezeAdapter = new FreezeAdapter(this);
-	      	                                                           	    				
-	}
-		
-	public void init() {
-		super.init();
-		
-		//Main Panel
+	    
+	    //Main Panel
 	    mainPanel = new JPanel();
 	    mainPanel.setLayout(new BorderLayout());      
 	      
 	    //Tabbed Panel
 	    tabPanel = new JTabbedPane();
 	    tabPanel.setFont(new java.awt.Font("Dialog", 0, 10));
-	      
-	    chartPanel = new IncomeExpenseByCategory(this);      
-	    chartPanel.addMouseListener(mouseAdapter);
-	    chartPanel.addMouseMotionListener(mouseAdapter);
-	    tabPanel.addTab("Chart", chartPanel);
+	    
+	    /*
+	     * Add IF conditions to add a report
+	     */
+		if(preferencesHandler.getPreference("org.homeunix.thecave.plugins.dashboard.REPORT").equalsIgnoreCase("Income and expenses by category for"))
+		    chartPanel = new IncomeExpenseByCategory(this);  
+		if(preferencesHandler.getPreference("org.homeunix.thecave.plugins.dashboard.REPORT").equalsIgnoreCase("Income for"))
+			chartPanel = new Income(this);
+		if(preferencesHandler.getPreference("org.homeunix.thecave.plugins.dashboard.REPORT").equalsIgnoreCase("Expenses for"))
+			chartPanel = new Expenses(this);
+			
+		//Default case
+		if(chartPanel == null)
+			chartPanel = new IncomeExpenseByCategory(this);
+		
+		    
+		chartPanel.addMouseListener(mouseAdapter);
+		chartPanel.addMouseMotionListener(mouseAdapter);	    
+		tabPanel.addTab("Chart", chartPanel);		
 	      
 	    dataPanel = new DataPanel(this);
 	    dataPanel.addMouseListener(mouseAdapter);
@@ -93,7 +102,12 @@ public class DashBoardFrame extends MossFrame {
 
 	    titlePanel.addMouseListener(mouseAdapter);
 	    titlePanel.addMouseMotionListener(mouseAdapter);
-	    mainPanel.add(titlePanel,BorderLayout.NORTH);	        
+	    mainPanel.add(titlePanel,BorderLayout.NORTH);	 
+	      	                                                           	    				
+	}
+		
+	public void init() {
+		super.init();				    	   
 		
 		//Moss frame properties
 		this.setIconImage(ClassLoaderFunctions.getImageFromClasspath("img/BuddiFrameIcon.gif"));

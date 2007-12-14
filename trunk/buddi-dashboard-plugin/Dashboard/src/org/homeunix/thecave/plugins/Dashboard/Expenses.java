@@ -25,13 +25,13 @@ import org.jfree.chart.plot.PlotOrientation;
  * @author santthosh
  *
  */
-public class IncomeExpenseByCategory extends ChartPanel {
+public class Expenses extends ChartPanel {
 	
 	public static final long serialVersionUID = 0;
 
 	JLabel lblChart;
 	
-	public IncomeExpenseByCategory(DashBoardFrame parent)
+	public Expenses(DashBoardFrame parent)
 	{
 		super(parent);
 	}
@@ -67,7 +67,7 @@ public class IncomeExpenseByCategory extends ChartPanel {
 		categoryDataset.addValue(15.4D, "Soap","Groceries");
 		categoryDataset.addValue(10.4D, "Detergent","Groceries");
 		JFreeChart chart = ChartFactory.createBarChart(				
-				"Income and Expenses by Category", 
+				"Expenses", 
 				"Category", 
 				"Percentage", 
 				categoryDataset, 
