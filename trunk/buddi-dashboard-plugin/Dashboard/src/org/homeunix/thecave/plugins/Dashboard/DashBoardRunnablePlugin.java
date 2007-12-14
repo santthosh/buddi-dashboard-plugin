@@ -95,6 +95,6 @@ public class DashBoardRunnablePlugin extends BuddiRunnablePlugin {
         {
         	dbFrame.dataPanel.refreshRate.setValue(Integer.parseInt(this.getPreference("org.homeunix.thecave.plugins.dashboard.REFRESH_RATE")));
         	
-        }        
+        }
 	}
 }
