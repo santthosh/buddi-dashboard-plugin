@@ -5,7 +5,6 @@ import java.awt.Point;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
-import java.util.Date;
 
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -22,25 +21,33 @@ public class DashBoardFrame extends MossFrame {
 	public static final long serialVersionUID = 1;
 		
 	private JPanel mainPanel,titlePanel;
-	private JTabbedPane tabPanel;
-	private DataPanel dataPanel;
+	protected JTabbedPane tabPanel;
+	protected DataPanel dataPanel;
 	private ChartPanel chartPanel;
 	private JLabel dashLabel, freezeLabel, hideLabel;
 	private MouseDragAdapter mouseAdapter;	
 	private HideAdapter hideAdapter;
 	private FreezeAdapter freezeAdapter;
+	protected PreferenceAccess preferencesHandler;
 
 
 	public DashBoardFrame(PreferenceAccess preferencesHandler)
 	{
 		super();	
 		
+		this.preferencesHandler = preferencesHandler; 
+		
 	    mouseAdapter = new MouseDragAdapter(this);
-	    mouseAdapter.setPreferences(preferencesHandler);
+	    mouseAdapter.setPreferences(this.preferencesHandler);
 	    hideAdapter = new HideAdapter(this);
 	    freezeAdapter = new FreezeAdapter(this);
-	      
-	    //Main Panel
+	      	                                                           	    				
+	}
+		
+	public void init() {
+		super.init();
+		
+		//Main Panel
 	    mainPanel = new JPanel();
 	    mainPanel.setLayout(new BorderLayout());      
 	      
@@ -86,11 +93,7 @@ public class DashBoardFrame extends MossFrame {
 
 	    titlePanel.addMouseListener(mouseAdapter);
 	    titlePanel.addMouseMotionListener(mouseAdapter);
-	    mainPanel.add(titlePanel,BorderLayout.NORTH);	                                                               	    					
-	}
-		
-	public void init() {
-		super.init();		
+	    mainPanel.add(titlePanel,BorderLayout.NORTH);	        
 		
 		//Moss frame properties
 		this.setIconImage(ClassLoaderFunctions.getImageFromClasspath("img/BuddiFrameIcon.gif"));
@@ -216,8 +219,6 @@ public class DashBoardFrame extends MossFrame {
 		public void setPreferences(PreferenceAccess preferences) {
 			this.preferences = preferences;
 		}
-
-
 	}
 
 	/**

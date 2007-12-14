@@ -4,11 +4,10 @@
 package org.homeunix.thecave.plugins.dashboard;
 
 import org.homeunix.thecave.buddi.plugin.api.BuddiRunnablePlugin;
-import org.homeunix.thecave.buddi.*;
+
 import org.homeunix.thecave.moss.exception.WindowOpenException;
 import org.homeunix.thecave.moss.util.Log;
-import org.homeunix.drummer.model.DataInstance;
-import org.homeunix.drummer.model.*; 
+ 
 
 /**
  * @author Santthosh
@@ -67,9 +66,8 @@ public class DashBoardRunnablePlugin extends BuddiRunnablePlugin {
 	 */
 	public void setPreferences()
 	{
-		//Retrieve the location preferences
-        if(this!=null &&
-           this.getPreference("org.homeunix.thecave.plugins.dashboard.LOCATION_X") != null &&
+		//Retrieve and update the location preferences
+        if(this.getPreference("org.homeunix.thecave.plugins.dashboard.LOCATION_X") != null &&
            this.getPreference("org.homeunix.thecave.plugins.dashboard.LOCATION_Y") != null)        		
         {
         	Integer X = Integer.parseInt(this.getPreference("org.homeunix.thecave.plugins.dashboard.LOCATION_X"));
@@ -80,5 +78,30 @@ public class DashBoardRunnablePlugin extends BuddiRunnablePlugin {
         		dbFrame.setLocation(X, Y);
         	}        	
         }
+        
+        //Retrieve and update the REPORT preferences
+        if(this.getPreference("org.homeunix.thecave.plugins.dashboard.REPORT") != null)
+        {
+        	dbFrame.dataPanel.chartTypeSelect.setSelectedItem(this.getPreference("org.homeunix.thecave.plugins.dashboard.REPORT"));
+        }
+        
+        //Retrieve and update the DATE preferences
+        if(this.getPreference("org.homeunix.thecave.plugins.dashboard.DATE") != null)
+        {
+        	dbFrame.dataPanel.dateSelect.setSelectedItem(this.getPreference("org.homeunix.thecave.plugins.dashboard.DATE"));
+        }
+        
+        //Retrieve and update the CHART_TYPE preferences
+        if(this.getPreference("org.homeunix.thecave.plugins.dashboard.CHART_TYPE") != null)
+        {
+        	dbFrame.dataPanel.styleSelect.setSelectedItem(this.getPreference("org.homeunix.thecave.plugins.dashboard.CHART_TYPE"));
+        }
+        
+        //Retrieve and update the REFRESH_RATE preferences
+        if(this.getPreference("org.homeunix.thecave.plugins.dashboard.REFRESH_RATE") != null)
+        {
+        	dbFrame.dataPanel.refreshRate.setValue(Integer.parseInt(this.getPreference("org.homeunix.thecave.plugins.dashboard.REFRESH_RATE")));
+        	
+        }        
 	}
 }
