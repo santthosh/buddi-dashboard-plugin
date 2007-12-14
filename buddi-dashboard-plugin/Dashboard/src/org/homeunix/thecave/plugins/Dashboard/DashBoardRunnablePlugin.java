@@ -53,8 +53,7 @@ public class DashBoardRunnablePlugin extends BuddiRunnablePlugin {
 		try {
 			dbFrame = new DashBoardFrame(this);			
 			dbFrame.openWindow();
-			setPreferences();		
-						
+			setPreferences();							
 		}				
 		catch (WindowOpenException woe){
 			woe.printStackTrace(Log.getPrintStream());
@@ -89,13 +88,7 @@ public class DashBoardRunnablePlugin extends BuddiRunnablePlugin {
         if(this.getPreference("org.homeunix.thecave.plugins.dashboard.DATE") != null)
         {
         	dbFrame.dataPanel.dateSelect.setSelectedItem(this.getPreference("org.homeunix.thecave.plugins.dashboard.DATE"));
-        }
-        
-        //Retrieve and update the CHART_TYPE preferences
-        if(this.getPreference("org.homeunix.thecave.plugins.dashboard.CHART_TYPE") != null)
-        {
-        	dbFrame.dataPanel.styleSelect.setSelectedItem(this.getPreference("org.homeunix.thecave.plugins.dashboard.CHART_TYPE"));
-        }
+        }       
         
         //Retrieve and update the REFRESH_RATE preferences
         if(this.getPreference("org.homeunix.thecave.plugins.dashboard.REFRESH_RATE") != null)

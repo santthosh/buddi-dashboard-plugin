@@ -15,7 +15,10 @@ import javax.swing.SwingUtilities;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Vector;
 
+import org.homeunix.thecave.buddi.plugin.BuddiPluginHelper;
+import org.homeunix.thecave.buddi.plugin.BuddiPluginHelper.DateChoice;
 import org.homeunix.thecave.buddi.plugin.api.PreferenceAccess;
 import org.homeunix.thecave.moss.swing.MossPanel;
 
@@ -33,8 +36,7 @@ public class DataPanel extends MossPanel {
 	private JLabel refreshDelay;
 	private JButton saveButton;
 	protected JSpinner refreshRate;
-	private JLabel style;
-	protected JComboBox styleSelect;
+	private JLabel style;	
 	
 	private CancelListener cancelListener;
 	private SaveListener saveListener;
@@ -52,10 +54,9 @@ public class DataPanel extends MossPanel {
 		super.init();
 		
 		chartTypeLabel = new JLabel();
-        chartTypeSelect = new JComboBox();
+        chartTypeSelect = new JComboBox();                
         dateSelect = new JComboBox();
         style = new JLabel();
-        styleSelect = new JComboBox();
         refreshDelay = new JLabel();
         refreshRate = new JSpinner();
         saveButton = new JButton();
@@ -66,23 +67,25 @@ public class DataPanel extends MossPanel {
         chartTypeLabel.setText("Chart Type: ");
 
         chartTypeSelect.setFont(new java.awt.Font("Dialog", 0, 10));
-        chartTypeSelect.setModel(new DefaultComboBoxModel(new String[] { "Income and expenses by category for", "Average income and expenses by category for", "Income for", "Expenses for", "Networth for the past" }));
+        
+        /*
+         * Change this COMBO BOX for adding more report types 
+         */        
+        chartTypeSelect.setModel(new DefaultComboBoxModel(new String[] { "Income and expenses by category for", "Income for", "Expenses for"}));
         chartTypeSelect.setMinimumSize(new java.awt.Dimension(252, 20));
         chartTypeSelect.setName("");
         chartTypeSelect.setPreferredSize(new java.awt.Dimension(252, 20));
 
+        /*
+         * Change this COMBO BOX for adding date ranges 
+         */
         dateSelect.setFont(new java.awt.Font("Dialog", 0, 10));
-        dateSelect.setModel(new DefaultComboBoxModel(new String[] { "Past Week", "Past Fortnight", "This Month", "Last Month", "This Quarter", "Last Quarter", "This Year", "This Year to Date", "Last Year" }));
+        Vector<DateChoice> dateChoices = BuddiPluginHelper.getInterval();
+        dateSelect.setModel(new DefaultComboBoxModel(dateChoices));        					
         dateSelect.setMinimumSize(new java.awt.Dimension(112, 20));
         dateSelect.setPreferredSize(new java.awt.Dimension(112, 20));
 
-        style.setFont(new java.awt.Font("Dialog", 0, 10));
-        style.setText("Style: ");
-
-        styleSelect.setFont(new java.awt.Font("Dialog", 0, 10));
-        styleSelect.setModel(new DefaultComboBoxModel(new String[] { "Line Graph", "Pie Chart" }));
-        styleSelect.setMinimumSize(new java.awt.Dimension(68, 20));
-        styleSelect.setPreferredSize(new java.awt.Dimension(68, 20));
+        style.setFont(new java.awt.Font("Dialog", 0, 10));        
 
         refreshDelay.setFont(new java.awt.Font("Dialog", 0, 10));
         refreshDelay.setText("Refresh Rate:");
@@ -118,9 +121,8 @@ public class DataPanel extends MossPanel {
                             .addGroup(GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                                 .addComponent(chartTypeSelect, GroupLayout.PREFERRED_SIZE, 202, GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(dateSelect, GroupLayout.PREFERRED_SIZE, 118, GroupLayout.PREFERRED_SIZE))
-                            .addComponent(styleSelect, GroupLayout.PREFERRED_SIZE, 79, GroupLayout.PREFERRED_SIZE))
-                        .addContainerGap())
+                                .addComponent(dateSelect, GroupLayout.PREFERRED_SIZE, 118, GroupLayout.PREFERRED_SIZE))                         
+                        ).addContainerGap())
                     .addGroup(GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addComponent(refreshRate, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, 168, Short.MAX_VALUE)
@@ -140,9 +142,8 @@ public class DataPanel extends MossPanel {
                 .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
-                            .addComponent(styleSelect, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-                            .addComponent(style))
+                        .addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)                        		
+                        		.addComponent(style))
                         .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
                             .addComponent(refreshRate, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
@@ -194,20 +195,18 @@ public class DataPanel extends MossPanel {
 				public void run() {
 										
 					preferences.putPreference("org.homeunix.thecave.plugins.dashboard.REPORT",dataPanel.chartTypeSelect.getSelectedItem().toString());
-					preferences.putPreference("org.homeunix.thecave.plugins.dashboard.DATE", dataPanel.dateSelect.getSelectedItem().toString());
-					preferences.putPreference("org.homeunix.thecave.plugins.dashboard.CHART_TYPE",dataPanel.styleSelect.getSelectedItem().toString());
+					preferences.putPreference("org.homeunix.thecave.plugins.dashboard.DATE", dataPanel.dateSelect.getSelectedItem().toString());					
 					preferences.putPreference("org.homeunix.thecave.plugins.dashboard.REFRESH_RATE",dataPanel.refreshRate.getValue().toString());
 					
 					javax.swing.JOptionPane.showMessageDialog(
 							parent, 
 							"Following preferences were saved! \n" +
 							"Chart: " + dataPanel.chartTypeSelect.getSelectedItem().toString() + "\n" + 
-							"Scope:" + dataPanel.dateSelect.getSelectedItem().toString() +  "\n" +
-							"Style:" + dataPanel.styleSelect.getSelectedItem().toString() +  "\n" +
+							"Scope:" + dataPanel.dateSelect.getSelectedItem().toString() +  "\n" +							
 							"Refresh rate:" + dataPanel.refreshRate.getValue().toString(), 
 							"Preferences Saved!", 
 							javax.swing.JOptionPane.INFORMATION_MESSAGE);
-					
+										
 					parent.tabPanel.setSelectedIndex(0);
 				}
 			});					
