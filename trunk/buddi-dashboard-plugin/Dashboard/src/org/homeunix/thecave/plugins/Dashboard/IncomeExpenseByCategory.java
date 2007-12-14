@@ -8,13 +8,10 @@ import java.awt.image.BufferedImage;
 import java.util.List;
 import java.util.Date;
 
-import javax.swing.Timer;
-
 import org.homeunix.thecave.buddi.plugin.api.model.*;
 import org.homeunix.thecave.buddi.plugin.api.model.impl.*;
 import org.homeunix.thecave.buddi.model.Document;
 import org.homeunix.thecave.buddi.view.MainFrame;
-import org.homeunix.thecave.plugins.dashboard.ChartPanel.ActivationListener;
 
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.JFreeChart;
