@@ -8,9 +8,6 @@ import java.awt.image.BufferedImage;
 import java.util.List;
 import java.util.Date;
 
-import javax.swing.JLabel;
-import javax.swing.ImageIcon;
-
 import org.homeunix.thecave.buddi.plugin.api.model.*;
 import org.homeunix.thecave.buddi.plugin.api.model.impl.*;
 import org.homeunix.thecave.buddi.model.Document;
@@ -25,24 +22,17 @@ import org.jfree.chart.plot.PlotOrientation;
  * @author santthosh
  *
  */
-public class Expenses extends ChartPanel {
+public class Expenses extends BuddiChart {
 	
 	public static final long serialVersionUID = 0;
-
-	JLabel lblChart;
 	
-	public Expenses(DashBoardFrame parent)
-	{
-		super(parent);
+	public Expenses(){				
 	}
-	
 	/* (non-Javadoc)
 	 * @see org.homeunix.thecave.plugins.dashboard.ChartPanel#paintChart(org.homeunix.thecave.moss.swing.MossDocumentFrame, java.util.Date, java.util.Date)
 	 */
 	@Override
-	public void paintChart(MainFrame mainFrame,String chartType, Date startDate,Date endDate) {
-		
-		this.removeAll();
+	public BufferedImage paintChart(MainFrame mainFrame,String chartType, Date startDate,Date endDate) {
 					
 		ImmutableDocument document = new ImmutableDocumentImpl((Document)mainFrame.getDocument());
 		if(document != null)
@@ -57,7 +47,7 @@ public class Expenses extends ChartPanel {
 		}
 		else
 		{
-			return;
+			return null;
 		}
 				
 		DefaultCategoryDataset categoryDataset = new DefaultCategoryDataset();
@@ -77,9 +67,6 @@ public class Expenses extends ChartPanel {
 				false);		                    
 						
 		BufferedImage image = chart.createBufferedImage(500,150);
-		lblChart = new JLabel();
-		lblChart.setIcon(new ImageIcon(image));	
-		
-		this.add(lblChart);
+		return image;
 	}
 }
