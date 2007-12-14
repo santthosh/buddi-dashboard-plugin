@@ -5,8 +5,6 @@ package org.homeunix.thecave.plugins.dashboard;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.WindowEvent;
-import java.awt.event.WindowListener;
 
 import javax.swing.BorderFactory;
 import javax.swing.JLabel;
@@ -97,11 +95,6 @@ public abstract class ChartPanel extends MossPanel {
 			if (mainFrame == null)
 			{
 				Log.emergency("No Buddi main windows were open!");
-				javax.swing.JOptionPane.showMessageDialog(
-						parent, 
-						"No Buddi frames are open for the dashboard focus", 
-						"Dashboard could not find open frames!", 
-						javax.swing.JOptionPane.ERROR_MESSAGE);
 				return;
 			}						
 						
