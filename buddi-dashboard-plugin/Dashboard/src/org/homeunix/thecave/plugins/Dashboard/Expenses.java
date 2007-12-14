@@ -79,7 +79,11 @@ public class Expenses extends BuddiChart {
 			chart.setBorderStroke(new BasicStroke(0));
 			((PiePlot) chart.getPlot()).setLabelGenerator(new BuddiPieSectionLabelGenerator());
 			
-			BufferedImage image = chart.createBufferedImage(500,150);
+			BufferedImage image = null;
+			if(CHART_HEIGHT > 150  && CHART_WIDTH > 500)
+				image = chart.createBufferedImage(CHART_WIDTH,CHART_HEIGHT);
+			else
+				image = chart.createBufferedImage(500,150);
 			return image;													
 		}
 		return null;

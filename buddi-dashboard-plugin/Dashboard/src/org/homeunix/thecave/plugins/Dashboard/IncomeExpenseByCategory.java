@@ -134,8 +134,12 @@ public class IncomeExpenseByCategory extends BuddiChart {
 			chart.setTitle(textTitle);
 			chart.setBackgroundPaint(Color.WHITE);
 			chart.setBorderStroke(new BasicStroke(0));
-			
-			BufferedImage image = chart.createBufferedImage(500,150);
+				
+			BufferedImage image = null;
+			if(CHART_HEIGHT > 150  && CHART_WIDTH > 500)
+				image = chart.createBufferedImage(CHART_WIDTH,CHART_HEIGHT);
+			else
+				image = chart.createBufferedImage(500,150);
 			return image;
 		}
 		return null;							                    							

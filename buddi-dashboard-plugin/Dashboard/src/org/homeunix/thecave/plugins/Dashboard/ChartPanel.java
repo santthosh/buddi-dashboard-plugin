@@ -124,6 +124,15 @@ public class ChartPanel extends MossPanel {
 					if(buddiChart == null)
 						buddiChart = new IncomeExpenseByCategory();
 
+					if(preferencesHandler.getPreference("org.homeunix.thecave.plugins.dashboard.WINDOW_HEIGHT")!=null &&
+				       preferencesHandler.getPreference("org.homeunix.thecave.plugins.dashboard.WINDOW_WIDTH")!=null)
+					{
+						buddiChart.CHART_HEIGHT = Integer.parseInt(preferencesHandler.getPreference("org.homeunix.thecave.plugins.dashboard.WINDOW_HEIGHT")) - 103;
+						buddiChart.CHART_WIDTH = Integer.parseInt(preferencesHandler.getPreference("org.homeunix.thecave.plugins.dashboard.WINDOW_WIDTH")) - 35;	
+						
+						System.out.println("Height: " + buddiChart.CHART_HEIGHT + "Width: " + buddiChart.CHART_WIDTH); 								
+					}
+										
 					//Find out which item was clicked on
 					Object o = parent.dataPanel.dateSelect.getSelectedItem();
 										
