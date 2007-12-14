@@ -14,9 +14,6 @@ import java.util.List;
 import java.util.Date;
 import java.util.Map;
 
-import javax.swing.JLabel;
-import javax.swing.ImageIcon;
-
 import org.homeunix.thecave.buddi.plugin.api.model.*;
 import org.homeunix.thecave.buddi.plugin.api.model.impl.*;
 import org.homeunix.thecave.buddi.plugin.api.util.TextFormatter;
@@ -33,24 +30,18 @@ import org.jfree.chart.plot.PiePlot;
  * @author santthosh
  *
  */
-public class Income extends ChartPanel {
+public class Income extends BuddiChart {
 	
 	public static final long serialVersionUID = 0;
 
-	JLabel lblChart;
-	
-	public Income(DashBoardFrame parent)
-	{
-		super(parent);				
+
+	public Income(){				
 	}
-	
 	/* (non-Javadoc)
 	 * @see org.homeunix.thecave.plugins.dashboard.ChartPanel#paintChart(org.homeunix.thecave.moss.swing.MossDocumentFrame, java.util.Date, java.util.Date)
 	 */
 	@Override
-	public void paintChart(MainFrame mainFrame,String chartType, Date startDate,Date endDate) {
-		
-		this.removeAll();
+	public BufferedImage paintChart(MainFrame mainFrame,String chartType, Date startDate,Date endDate) {
 					
 		ImmutableDocument document = new ImmutableDocumentImpl((Document)mainFrame.getDocument());
 		if(document != null)
@@ -83,12 +74,9 @@ public class Income extends ChartPanel {
 			((PiePlot) chart.getPlot()).setLabelGenerator(new BuddiPieSectionLabelGenerator());
 					
 			BufferedImage image = chart.createBufferedImage(500,150);
-			lblChart = new JLabel();
-			lblChart.setIcon(new ImageIcon(image));	
-			
-			this.add(lblChart);						
+			return image;									
 		}
-		return;								                    						
+		return null;								                    						
 	}
 	
 	private Map<ImmutableBudgetCategory, Long> getIncomeBetween(ImmutableDocument model, Date startDate, Date endDate){

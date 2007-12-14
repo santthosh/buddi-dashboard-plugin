@@ -50,20 +50,7 @@ public class DashBoardFrame extends MossFrame {
 	    tabPanel = new JTabbedPane();
 	    tabPanel.setFont(new java.awt.Font("Dialog", 0, 10));
 	    
-	    /*
-	     * Add IF conditions to add a report
-	     */
-		if(preferencesHandler.getPreference("org.homeunix.thecave.plugins.dashboard.REPORT").equalsIgnoreCase("Income and expenses by category for"))
-		    chartPanel = new IncomeExpenseByCategory(this);  
-		if(preferencesHandler.getPreference("org.homeunix.thecave.plugins.dashboard.REPORT").equalsIgnoreCase("Income for"))
-			chartPanel = new Income(this);
-		if(preferencesHandler.getPreference("org.homeunix.thecave.plugins.dashboard.REPORT").equalsIgnoreCase("Expenses for"))
-			chartPanel = new Expenses(this);
-			
-		//Default case
-		if(chartPanel == null)
-			chartPanel = new IncomeExpenseByCategory(this);
-		
+	    chartPanel = new ChartPanel(this);	    		
 		    
 		chartPanel.addMouseListener(mouseAdapter);
 		chartPanel.addMouseMotionListener(mouseAdapter);	    

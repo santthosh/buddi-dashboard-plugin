@@ -5,16 +5,17 @@ package org.homeunix.thecave.plugins.dashboard;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
 
 import javax.swing.BorderFactory;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 import javax.swing.Timer;
-
-import java.util.Date;
+import javax.swing.ImageIcon;
 
 import org.homeunix.thecave.buddi.plugin.BuddiPluginHelper.DateChoice;
+import org.homeunix.thecave.buddi.plugin.api.PreferenceAccess;
 import org.homeunix.thecave.buddi.view.MainFrame;
 import org.homeunix.thecave.moss.swing.ApplicationModel;
 import org.homeunix.thecave.moss.swing.MossFrame;
@@ -25,7 +26,7 @@ import org.homeunix.thecave.moss.util.Log;
  * @author Santthosh
  *
  */
-public abstract class ChartPanel extends MossPanel {
+public class ChartPanel extends MossPanel {
 	public static final long serialVersionUID = 0;
 	
 	protected final DashBoardFrame parent;
@@ -53,9 +54,7 @@ public abstract class ChartPanel extends MossPanel {
 		
 		paintLaunchLabel();
 		timer.start();		
-   	}
-	
-	public abstract void paintChart(MainFrame mainFrame, String chartType, Date startDate, Date endDate);
+   	}		
 	
 	public void paintLaunchLabel()
 	{
@@ -72,11 +71,14 @@ public abstract class ChartPanel extends MossPanel {
 		private DashBoardFrame parent;
 		static String CHART_STYLE = null;
 		private MainFrame mainFrame = null;
+		protected PreferenceAccess preferencesHandler;
+		private BuddiChart buddiChart = null;
 		
 		public ActivationListener(ChartPanel chartPanel, DashBoardFrame parent)
 		{
 			this.chartPanel = chartPanel;			
-			this.parent = parent;			
+			this.parent = parent;	
+			this.preferencesHandler = parent.preferencesHandler;
 		}
 		
 		public void actionPerformed(ActionEvent e) 
@@ -88,46 +90,66 @@ public abstract class ChartPanel extends MossPanel {
 		{
 			SwingUtilities.invokeLater(new Runnable() {
 				public void run() {
-			///Check if we have opened at least one window...						
-			for (MossFrame mossFrame : ApplicationModel.getInstance().getOpenFrames()) {
-				if (mossFrame instanceof MainFrame){
-					mainFrame = (MainFrame) mossFrame;
-					break;
-				}
-			}
-			if (mainFrame == null)
-			{
-				Log.emergency("No Buddi main windows were open!");
-				return;
-			}			
-			
-			CHART_STYLE = parent.dataPanel.chartTypeSelect.getSelectedItem().toString();					
-			
-			//Find out which item was clicked on
-			Object o = parent.dataPanel.dateSelect.getSelectedItem();
+					///Check if we have opened at least one window...						
+					for (MossFrame mossFrame : ApplicationModel.getInstance().getOpenFrames()) {
+						if (mossFrame instanceof MainFrame){
+							mainFrame = (MainFrame) mossFrame;
+							break;
+						}
+					}
+					if (mainFrame == null)
+					{
+						Log.emergency("No Buddi main windows were open!");
+						return;
+					}													
+															
+					CHART_STYLE = parent.dataPanel.chartTypeSelect.getSelectedItem().toString();
+										
+					if(preferencesHandler == null)
+					{
+						Log.emergency("Preference handler is null!");
+						return;
+					}
+					
+					if(preferencesHandler.getPreference("org.homeunix.thecave.plugins.dashboard.REPORT")!=null)
+					{
+						if(preferencesHandler.getPreference("org.homeunix.thecave.plugins.dashboard.REPORT").equalsIgnoreCase("Income and expenses by category for"))
+							buddiChart = new IncomeExpenseByCategory();  
+						if(preferencesHandler.getPreference("org.homeunix.thecave.plugins.dashboard.REPORT").equalsIgnoreCase("Income for"))
+							buddiChart = new Income();
+						if(preferencesHandler.getPreference("org.homeunix.thecave.plugins.dashboard.REPORT").equalsIgnoreCase("Expenses for"))
+							buddiChart = new Expenses();
+					}
+					
+					if(buddiChart == null)
+						buddiChart = new IncomeExpenseByCategory();
 
-			//If the object was a date choice, access the encoded dates
-			if (o instanceof DateChoice){
-				DateChoice choice = (DateChoice) o;
+					//Find out which item was clicked on
+					Object o = parent.dataPanel.dateSelect.getSelectedItem();
+										
+					//If the object was a date choice, access the encoded dates
+					if (o instanceof DateChoice){
+						DateChoice choice = (DateChoice) o;
 
-				//As long as the choice is not custom, our job is easy
-				if (!choice.isCustom()){
-					//Repaint the chart		
-					chartPanel.paintChart(mainFrame,CHART_STYLE, choice.getStartDate(), choice.getEndDate());					
+						//As long as the choice is not custom, our job is easy
+						if (!choice.isCustom()){
+							//Repaint the chart		
+							BufferedImage image = buddiChart.paintChart(mainFrame,CHART_STYLE, choice.getStartDate(), choice.getEndDate());
+							chartPanel.launchLabel.setText("");
+							chartPanel.launchLabel.setIcon(new ImageIcon(image));							
+							chartPanel.launchLabel.repaint();
+						}
+						//If they want a custom window, it's a little harder... we need to open the custom date window, which then launches the plugin.
+						else{
+							javax.swing.JOptionPane.showMessageDialog(
+									parent, 
+									"Custom date ranges not supported yet!", 
+									"Custom date range not supported!", 
+									javax.swing.JOptionPane.INFORMATION_MESSAGE);
+						}
+					}
+					parent.pack();					
 				}
-				//If they want a custom window, it's a little 
-				// harder... we need to open the custom date
-				// window, which then launches the plugin.
-				else{
-					javax.swing.JOptionPane.showMessageDialog(
-							parent, 
-							"Custom date ranges not supported yet!", 
-							"Custom date range not supported!", 
-							javax.swing.JOptionPane.INFORMATION_MESSAGE);
-				}
-			}									
-			parent.pack();					
-			}
 			});
 		}				
 	}
