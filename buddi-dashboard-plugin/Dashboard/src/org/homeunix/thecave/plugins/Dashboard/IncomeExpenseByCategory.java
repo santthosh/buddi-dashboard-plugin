@@ -4,19 +4,28 @@
 package org.homeunix.thecave.plugins.dashboard;
 
 
+import java.awt.BasicStroke;
+import java.awt.Color;
+import java.awt.Font;
 import java.awt.image.BufferedImage;
+import java.text.SimpleDateFormat;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Date;
 
+import org.homeunix.thecave.buddi.Const;
 import org.homeunix.thecave.buddi.plugin.api.model.*;
 import org.homeunix.thecave.buddi.plugin.api.model.impl.*;
 import org.homeunix.thecave.buddi.model.Document;
 import org.homeunix.thecave.buddi.view.MainFrame;
+import org.homeunix.thecave.moss.util.Log;
 
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.JFreeChart;
 import org.jfree.data.category.DefaultCategoryDataset;
 import org.jfree.chart.plot.PlotOrientation;
+import org.jfree.chart.title.TextTitle;
 
 /**
  * @author santthosh
@@ -41,33 +50,94 @@ public class IncomeExpenseByCategory extends BuddiChart {
 			
 			List<ImmutableBudgetCategory> categories = document.getImmutableBudgetCategories();	
 			
-			for(int i=0;i< categories.size();i++)
-			{
-				System.out.println(categories.get(i).getFullName());
-			}
-		}
-		else
-		{
-			return null;
-		}
+			//Sort the collections
+			Collections.sort(categories, new Comparator<ImmutableBudgetCategory>(){
+				public int compare(ImmutableBudgetCategory o1, ImmutableBudgetCategory o2) {
+					//First we sort by income
+					if (o1.isIncome() != o2.isIncome()){
+						if (o1.isIncome()){
+							return -1;
+						}
+						else {
+							return 1;
+						}
+					}
+									
+					//Finally, we sort by Category Name
+					return o1.toString().compareTo(o2.toString());
+				}
+			});
+			
+			long totalActual = 0, totalBudgeted = 0;
+			
+			DefaultCategoryDataset categoryDataset = new DefaultCategoryDataset();			
+								
+			/*for (ImmutableBudgetCategory c : categories){
+				List<ImmutableTransaction> transactions = document.getImmutableTransactions(c, startDate, endDate);
+				for (ImmutableTransaction transaction : transactions) {							
+						categoryDataset.addValue((double)transaction.getAmount()/100,transaction.getDescription(),c.getName());
+				}											
+			}*/ 
+			
+			for (ImmutableBudgetCategory c : categories){
+				List<ImmutableTransaction> transactions = document.getImmutableTransactions(c, startDate, endDate);
+				long actual = 0;
+				for (ImmutableTransaction transaction : transactions) {
+						actual += transaction.getAmount();
+
+						if (transaction.getTo() instanceof ImmutableBudgetCategory){
+							totalActual -= transaction.getAmount();
+						}
+						else if (transaction.getFrom() instanceof ImmutableBudgetCategory){
+							totalActual += transaction.getAmount();
+						}
+						else {
+							if (Const.DEVEL) Log.debug("For transaction " + transaction + ", neither " + transaction.getTo() + " nor " + transaction.getFrom() + " are of type Category.");
+						}					
+				}
 				
-		DefaultCategoryDataset categoryDataset = new DefaultCategoryDataset();
-		categoryDataset.addValue(5D, "Dinner","Food");
-		categoryDataset.addValue(10.2D, "Lunch","Food");
-		categoryDataset.addValue(11.3D, "BreakFast","Food");
-		categoryDataset.addValue(15.4D, "Soap","Groceries");
-		categoryDataset.addValue(10.4D, "Detergent","Groceries");
-		JFreeChart chart = ChartFactory.createBarChart(				
-				"Income and Expenses by Category", 
-				"Category", 
-				"Percentage", 
-				categoryDataset, 
-				PlotOrientation.VERTICAL,
-				false,
-				false,
-				false);		                    
-						
-		BufferedImage image = chart.createBufferedImage(500,150);
-		return image;
+				long budgeted = c.getAmount(startDate, endDate);
+				if (c.isIncome()){
+					totalBudgeted += budgeted;					
+				}
+				else {
+					totalBudgeted -= budgeted;
+				}
+				
+
+				if (budgeted != 0 || transactions.size() > 0){												
+					long difference = actual - budgeted;
+					
+					if(c.isIncome())
+						categoryDataset.addValue((double)difference/100,c.getName(),"Income");
+					else
+						categoryDataset.addValue((double)difference/100,c.getName(),"Expense");
+				}
+			}
+			
+			long totalDifference = totalActual - totalBudgeted;
+									
+			JFreeChart chart = ChartFactory.createBarChart(				
+					"", 
+					"Category", 
+					"Amount", 
+					categoryDataset, 
+					PlotOrientation.VERTICAL,
+					true,
+					true,
+					false);		    
+			
+			Font font = new Font(Font.DIALOG,Font.PLAIN,10);
+			SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd/yy");
+			TextTitle textTitle = new TextTitle("Income/Expenses by category from "+ dateFormat.format(startDate) + " to " + dateFormat.format(endDate) +
+					" : Net Worth: " + (double)totalDifference/100,font);
+			chart.setTitle(textTitle);
+			chart.setBackgroundPaint(Color.WHITE);
+			chart.setBorderStroke(new BasicStroke(0));
+			
+			BufferedImage image = chart.createBufferedImage(500,150);
+			return image;
+		}
+		return null;							                    							
 	}
 }
