@@ -6,7 +6,10 @@ package org.homeunix.thecave.plugins.dashboard;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.image.BufferedImage;
+
+import java.text.SimpleDateFormat;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -25,6 +28,7 @@ import org.jfree.chart.ChartFactory;
 import org.jfree.chart.JFreeChart;
 import org.jfree.data.general.DefaultPieDataset;
 import org.jfree.chart.plot.PiePlot;
+import org.jfree.chart.title.TextTitle;
 
 /**
  * @author santthosh
@@ -68,7 +72,11 @@ public class Income extends BuddiChart {
 					true,
 					false
 			);
-			
+						
+			Font font = new Font(Font.DIALOG,Font.PLAIN,10);
+			SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd/yy");
+			TextTitle textTitle = new TextTitle("Income from "+ dateFormat.format(startDate) + " to " + dateFormat.format(endDate),font);
+			chart.setTitle(textTitle);
 			chart.setBackgroundPaint(Color.WHITE);
 			chart.setBorderStroke(new BasicStroke(0));
 			((PiePlot) chart.getPlot()).setLabelGenerator(new BuddiPieSectionLabelGenerator());
