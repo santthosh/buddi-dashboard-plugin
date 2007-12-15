@@ -67,6 +67,7 @@ public class DataPanel extends MossPanel {
 	 * (non-Javadoc)
 	 * @see org.homeunix.thecave.moss.swing.MossPanel#init()
 	 */
+	@Override
 	public void init() {
 		super.init();
 		
