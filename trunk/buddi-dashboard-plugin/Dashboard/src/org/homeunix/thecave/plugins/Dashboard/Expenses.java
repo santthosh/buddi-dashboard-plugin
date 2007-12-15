@@ -1,5 +1,13 @@
 /**
  * 
+ * THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND, EXPRESS
+ * OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, 
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.  IN NO EVENT SHALL 
+ * THE CONTRIBUTORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR 
+ * OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+ * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS 
+ * WITH THE SOFTWARE.
+ *  
  */
 package org.homeunix.thecave.plugins.dashboard;
 
@@ -30,6 +38,8 @@ import org.jfree.chart.plot.PiePlot;
 import org.jfree.chart.title.TextTitle;
 
 /**
+ * Mimics the expense report of Buddi reports to generate a pie chart
+ * 
  * @author santthosh
  *
  */
@@ -39,6 +49,7 @@ public class Expenses extends BuddiChart {
 	
 	public Expenses(){				
 	}
+	
 	/* (non-Javadoc)
 	 * @see org.homeunix.thecave.plugins.dashboard.ChartPanel#paintChart(org.homeunix.thecave.moss.swing.MossDocumentFrame, java.util.Date, java.util.Date)
 	 */
@@ -89,6 +100,14 @@ public class Expenses extends BuddiChart {
 		return null;
 	}
 	
+	/**
+	 * Get the expenses between given date ranges
+	 * 
+	 * @param model
+	 * @param startDate
+	 * @param endDate
+	 * @return
+	 */
 	private Map<ImmutableBudgetCategory, Long> getExpensesBetween(ImmutableDocument model, Date startDate, Date endDate){
 		List<ImmutableTransaction> transactions = model.getImmutableTransactions(startDate, endDate);
 		Map<ImmutableBudgetCategory, Long> categories = new HashMap<ImmutableBudgetCategory, Long>();

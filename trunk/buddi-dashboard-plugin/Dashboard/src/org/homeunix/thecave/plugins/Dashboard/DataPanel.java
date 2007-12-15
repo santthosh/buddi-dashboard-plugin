@@ -1,21 +1,29 @@
 /**
  * 
+ * THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND, EXPRESS
+ * OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, 
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.  IN NO EVENT SHALL 
+ * THE CONTRIBUTORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR 
+ * OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+ * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS 
+ * WITH THE SOFTWARE.
+ *  
  */
 package org.homeunix.thecave.plugins.dashboard;
-
-import javax.swing.JComboBox;
-import javax.swing.JButton;
-import javax.swing.JSpinner;
-import javax.swing.JLabel;
-import javax.swing.GroupLayout;
-import javax.swing.LayoutStyle;
-import javax.swing.BorderFactory;
-import javax.swing.DefaultComboBoxModel;
-import javax.swing.SwingUtilities;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Vector;
+
+import javax.swing.BorderFactory;
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.GroupLayout;
+import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JLabel;
+import javax.swing.JSpinner;
+import javax.swing.LayoutStyle;
+import javax.swing.SwingUtilities;
 
 import org.homeunix.thecave.buddi.plugin.BuddiPluginHelper;
 import org.homeunix.thecave.buddi.plugin.BuddiPluginHelper.DateChoice;
@@ -41,6 +49,11 @@ public class DataPanel extends MossPanel {
 	private CancelListener cancelListener;
 	private SaveListener saveListener;
 	
+	/**
+	 * Load the datapanel, do not paint it yet!
+	 * 
+	 * @param parent
+	 */
 	public DataPanel(DashBoardFrame parent){
 		super(true);		
 		
@@ -50,6 +63,10 @@ public class DataPanel extends MossPanel {
 		open();
 	}
 	
+	/*
+	 * (non-Javadoc)
+	 * @see org.homeunix.thecave.moss.swing.MossPanel#init()
+	 */
 	public void init() {
 		super.init();
 		
@@ -157,6 +174,13 @@ public class DataPanel extends MossPanel {
         );
 	}
 	
+	/**
+	 * Listens for the cancel button event and switches the tab panel to the
+	 * chart tab
+	 * 
+	 * @author Santthosh
+	 *
+	 */
 	public static class CancelListener implements ActionListener
 	{ 
 		private DashBoardFrame parent;		
@@ -176,6 +200,14 @@ public class DataPanel extends MossPanel {
 		}
 	}
 	
+	/**
+	 * 
+	 * Listens for the Save buttons action event and puts all the preferences on
+	 * to the preferences file for future  use.
+	 * 
+	 * @author Santthosh
+	 *
+	 */
 	public static class SaveListener implements ActionListener
 	{ 
 		private DataPanel dataPanel;
