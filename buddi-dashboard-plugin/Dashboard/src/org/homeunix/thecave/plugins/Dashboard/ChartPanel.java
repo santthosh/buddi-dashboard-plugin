@@ -1,5 +1,13 @@
 /**
  * 
+ * THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND, EXPRESS
+ * OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, 
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.  IN NO EVENT SHALL 
+ * THE CONTRIBUTORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR 
+ * OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+ * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS 
+ * WITH THE SOFTWARE.
+ *  
  */
 package org.homeunix.thecave.plugins.dashboard;
 
@@ -23,6 +31,8 @@ import org.homeunix.thecave.moss.swing.MossPanel;
 import org.homeunix.thecave.moss.util.Log;
 
 /**
+ * ChartPanel where the actual chart is displayed 
+ * 
  * @author Santthosh
  *
  */
@@ -37,6 +47,11 @@ public class ChartPanel extends MossPanel {
 	Timer timer;	
 	ActivationListener activationListener;	
 	
+	/**
+	 * Create the ChartPanel, do not paint it yet!
+	 * 
+	 * @param parent
+	 */
 	public ChartPanel(DashBoardFrame parent){
 		super(true);
 		
@@ -48,6 +63,10 @@ public class ChartPanel extends MossPanel {
 		open();
 	}
 		
+	/*
+	 * (non-Javadoc)
+	 * @see org.homeunix.thecave.moss.swing.MossPanel#init()
+	 */
 	public void init() {	
 		super.init();		
 		setBorder(BorderFactory.createLineBorder(new java.awt.Color(0, 102, 153)));
@@ -56,6 +75,9 @@ public class ChartPanel extends MossPanel {
 		timer.start();		
    	}		
 	
+	/**
+	 * Paint the launch label when necessary
+	 */	
 	public void paintLaunchLabel()
 	{
 		launchPanel = new JPanel();		
@@ -65,6 +87,16 @@ public class ChartPanel extends MossPanel {
 		this.add(launchPanel);
 	}
 	
+	/**
+	 * Timer event handler.
+	 * 
+	 * On a timer event, identifies the frame, instantiates the BuddiChart,
+	 * sets the preferences for the chart and gets the chart painted by a BuddiChart
+	 * instance and then sets the resulting image as icon to the launchLabel
+	 * 
+	 * @author Santthosh
+	 *
+	 */
 	public static class ActivationListener implements ActionListener
 	{
 		private ChartPanel chartPanel;		
@@ -162,5 +194,4 @@ public class ChartPanel extends MossPanel {
 			});
 		}				
 	}
-
 }

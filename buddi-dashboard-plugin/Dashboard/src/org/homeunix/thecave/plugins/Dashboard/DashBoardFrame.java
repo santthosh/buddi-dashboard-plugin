@@ -1,33 +1,48 @@
+/**
+ * 
+ * THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND, EXPRESS
+ * OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, 
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.  IN NO EVENT SHALL 
+ * THE CONTRIBUTORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR 
+ * OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+ * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS 
+ * WITH THE SOFTWARE.
+ *  
+ */
+
 package org.homeunix.thecave.plugins.dashboard;
 
 import java.awt.BorderLayout;
 import java.awt.Point;
-
+import java.awt.event.ComponentEvent;
+import java.awt.event.ComponentListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
-
-import java.awt.event.ComponentEvent;
-import java.awt.event.ComponentListener;
 
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.SwingUtilities;
 
-import org.homeunix.thecave.moss.swing.MossFrame;
 import org.homeunix.thecave.buddi.plugin.api.PreferenceAccess;
+import org.homeunix.thecave.moss.swing.MossFrame;
 import org.homeunix.thecave.moss.util.ClassLoaderFunctions;
 
-
+/**
+ * GUI of the dashboard, registered with listeners for the event handling
+ * 
+ * @author Santthosh
+ *
+ */
 public class DashBoardFrame extends MossFrame {
 	
 	public static final long serialVersionUID = 1;
 		
+	protected DataPanel dataPanel;
+	protected ChartPanel chartPanel;	
 	private JPanel mainPanel,titlePanel;
 	protected JTabbedPane tabPanel;
-	protected DataPanel dataPanel;
-	protected ChartPanel chartPanel;
 	private JLabel dashLabel, freezeLabel;
 	
 	private MouseDragAdapter mouseAdapter;	
@@ -36,13 +51,19 @@ public class DashBoardFrame extends MossFrame {
 	
 	protected PreferenceAccess preferencesHandler;
 
-
+	/**
+	 * Build the dashboard main moss frame, register listeners (observers) for the 
+	 * action events (We donot launch the frame yet! we are just building it)
+	 * 
+	 * @param preferencesHandler
+	 */
 	public DashBoardFrame(PreferenceAccess preferencesHandler)
 	{
 		super();	
 		
 		this.preferencesHandler = preferencesHandler; 
 		
+		//Listeners
 	    mouseAdapter = new MouseDragAdapter(this);
 	    mouseAdapter.setPreferences(this.preferencesHandler);
 	    freezeAdapter = new FreezeAdapter(this);
@@ -93,7 +114,12 @@ public class DashBoardFrame extends MossFrame {
 	    mainPanel.add(titlePanel,BorderLayout.NORTH);	 
 	      	                                                           	    				
 	}
-		
+	
+	/*
+	 * (non-Javadoc)
+	 * @see org.homeunix.thecave.moss.swing.MossFrame#init()
+	 */
+	@Override
 	public void init() {
 		super.init();				    	   
 		
@@ -104,6 +130,13 @@ public class DashBoardFrame extends MossFrame {
 		this.add(mainPanel);	
 	}
 	
+	/**
+	 * This is a frame resize listener class, when the frame is resized it registers 
+	 * the resized frame height and width to the preferences file. 
+	 * 
+	 * @author Santthosh
+	 *
+	 */
 	private static class FrameAdapter implements ComponentListener
 	{
 		private DashBoardFrame frame;
@@ -163,6 +196,13 @@ public class DashBoardFrame extends MossFrame {
 	    }
 	}
 	
+	/**
+	 * This adapter listens for the click event on the freeze button, and accordingly
+	 * flips the timer in the chart panel
+	 * 
+	 * @author Santthosh
+	 *
+	 */
 	private static class FreezeAdapter implements MouseListener, MouseMotionListener{
 	      
 	      private DashBoardFrame frame;
@@ -201,6 +241,13 @@ public class DashBoardFrame extends MossFrame {
 	      
 	   }
 	
+	/**
+	 * Listens of the mouse move events to register the X and Y location of the dashboard
+	 * frame
+	 * 
+	 * @author Santthosh
+	 *
+	 */
 	private static class MouseDragAdapter implements MouseListener, MouseMotionListener{
 
 		private static Point origin = new Point();

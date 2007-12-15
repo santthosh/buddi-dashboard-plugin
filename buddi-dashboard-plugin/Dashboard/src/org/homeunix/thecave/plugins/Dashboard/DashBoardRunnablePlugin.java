@@ -1,15 +1,24 @@
 /**
  * 
+ * THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND, EXPRESS
+ * OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, 
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.  IN NO EVENT SHALL 
+ * THE CONTRIBUTORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR 
+ * OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+ * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS 
+ * WITH THE SOFTWARE.
+ *  
  */
 package org.homeunix.thecave.plugins.dashboard;
 
 import org.homeunix.thecave.buddi.plugin.api.BuddiRunnablePlugin;
-
 import org.homeunix.thecave.moss.exception.WindowOpenException;
 import org.homeunix.thecave.moss.util.Log;
  
 
 /**
+ * Entry point for the Dashboard plugin
+ * 
  * @author Santthosh
  *
  */
@@ -22,7 +31,6 @@ public class DashBoardRunnablePlugin extends BuddiRunnablePlugin {
 	 */
 	@Override
 	public String getDescription() {
-		// TODO Auto-generated method stub		
 		return "DashBoard plugin for Buddi 1.0";
 	}
 
@@ -31,7 +39,6 @@ public class DashBoardRunnablePlugin extends BuddiRunnablePlugin {
 	 */
 	@Override
 	public String getName() {
-		// TODO Auto-generated method stub
 		return "DashBoard";
 	}
 
@@ -40,12 +47,14 @@ public class DashBoardRunnablePlugin extends BuddiRunnablePlugin {
 	 */
 	@Override
 	public boolean isPluginActive() {
-		// TODO Auto-generated method stub
 		return false;
 	}
 
 	/* (non-Javadoc)
 	 * @see java.lang.Runnable#run()
+	 * 
+	 * Create an instance of the DashBoardFrame and launch the dashboard
+	 * Also preload the necessary settings saved to the preferences file
 	 */
 	@Override
 	public void run() {				
@@ -61,7 +70,8 @@ public class DashBoardRunnablePlugin extends BuddiRunnablePlugin {
 	}
 	
 	/**
-	 * 
+	 * This methods retrieves preferences saved to the buddi file and sets 
+	 * it to the recently launced dashboard
 	 */
 	public void setPreferences()
 	{
