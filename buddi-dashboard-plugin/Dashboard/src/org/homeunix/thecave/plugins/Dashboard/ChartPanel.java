@@ -67,6 +67,7 @@ public class ChartPanel extends MossPanel {
 	 * (non-Javadoc)
 	 * @see org.homeunix.thecave.moss.swing.MossPanel#init()
 	 */
+	@Override
 	public void init() {	
 		super.init();		
 		setBorder(BorderFactory.createLineBorder(new java.awt.Color(0, 102, 153)));
